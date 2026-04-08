@@ -26,8 +26,9 @@ def parse_argv():
         range = int(range)
     except ValueError:
         print("Range must be an integer")
+        sys.exit(-1)
 
-    if int(range) <= 0:
+    if range <= 0:
         print("Range must be > 0")
         sys.exit(-1)
     return range
