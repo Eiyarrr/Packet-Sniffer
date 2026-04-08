@@ -8,13 +8,17 @@ def print_packet(packet):
 def packet_loop(user_range):
     print("start")
     prev = 0
+    duplicate_counter = 0
     for _ in range(1, user_range):
         print("loop")
         capture = sniff(prn=print_packet, count = 1)
         if capture == prev: # -> "[x#]" at the end of packet summaries
-            print(1)
-        prev = capture
-        time.sleep(0.1)
+            duplicate_counter += 1
+            print("Dupe #" + str(duplicate_counter))
+        else:
+            duplicate_counter = 0
+            prev = capture
+        time.sleep(0.2)
 
 def parse_argv():
     if len(sys.argv) != 2:
