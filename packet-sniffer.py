@@ -13,10 +13,9 @@ def get_packets(count):
         print("loop")
         previous = current
         current = sniff(prn=create_summary, count = 1)
-        if (current[0].sprintf("%IP.src% %IP.dst% %IP.proto%") == 
-        previous[0].sprintf("%IP.src% %IP.dst% %IP.proto%")): # -> "[x#]" at the end of packet summaries
+        if create_summary(current) == create_summary(previous): # -> "[x#]" at the end of packet summaries
             duplicates += 1
-            print("Duplicate of srcIP, dstIP, IPproto" + str(duplicates))
+            print("Duplicate of srcIP, dstIP, IPproto: #" + str(duplicates))
         else:
             duplicates = 0
             previous = current
