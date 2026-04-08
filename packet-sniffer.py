@@ -2,44 +2,45 @@ from scapy.all import sniff
 import time
 import sys
 
+# Stops the packet from returning "{PACKET}\nNone" when called with summary()
 def print_packet(packet):
     return packet.summary()
 
-def packet_loop(user_range):
+def get_packets(count):
     print("start")
-    prev = 0
-    duplicate_counter = 0
-    for _ in range(1, user_range):
+    previous = 0
+    duplicates = 0
+    for _ in range(1, count):
         print("loop")
-        capture = sniff(prn=print_packet, count = 1)
-        if capture == prev: # -> "[x#]" at the end of packet summaries
-            duplicate_counter += 1
-            print("Dupe #" + str(duplicate_counter))
+        current = sniff(prn=print_packet, count = 1)
+        if current == previous: # -> "[x#]" at the end of packet summaries
+            duplicates += 1
+            print("Duplicate " + str(duplicates))
         else:
-            duplicate_counter = 0
-            prev = capture
+            duplicates = 0
+            previous = current
         time.sleep(0.2)
 
-def parse_argv():
+def parse_user_args():
     if len(sys.argv) != 2:
         print("Invalid number of arguments")
         sys.exit(-1)
 
-    user_range = sys.argv[1]
+    count = sys.argv[1]
     try:
-        user_range = int(user_range)
+        count = int(count)
     except ValueError:
         print("Range must be an integer")
         sys.exit(-1)
 
-    if user_range <= 0:
+    if count <= 0:
         print("Range must be > 0")
         sys.exit(-1)
-    return user_range
+    return count
 
 def main():
-    user_range = parse_argv()
-    packet_loop(user_range)
+    count = parse_user_args()
+    get_packets(count)
 
 if __name__ == "__main__":
     main()
