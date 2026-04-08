@@ -1,9 +1,15 @@
 from scapy.all import sniff
 import time
 
-def foo(packet):
-    print(packet.summary())
+def print_packet(packet):
+    return packet.summary()
 
-while True:
-    sniff(prn=foo, count = 1)
-    time.sleep(0.2)
+print("start")
+prev = 0
+for _ in range(0, 10):
+    print("loop")
+    capture = sniff(prn=print_packet, count = 1)
+    if capture == prev: # -> "[x#]" at the end of packet summaries
+        print(1)
+    prev = capture
+    time.sleep(0.1)
