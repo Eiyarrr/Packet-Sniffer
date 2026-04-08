@@ -8,12 +8,13 @@ def print_packet(packet):
 
 def get_packets(count):
     print("start")
-    previous = 0
+    current = sniff(prn=print_packet, count = 1)
     duplicates = 0
-    for _ in range(1, count):
+    for _ in range(0, count):
         print("loop")
+        previous = current
         current = sniff(prn=print_packet, count = 1)
-        if current == previous: # -> "[x#]" at the end of packet summaries
+        if current.summary() == previous.summary(): # -> "[x#]" at the end of packet summaries
             duplicates += 1
             print("Duplicate " + str(duplicates))
         else:
