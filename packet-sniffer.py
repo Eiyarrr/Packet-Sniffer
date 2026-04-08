@@ -2,18 +2,17 @@ from scapy.all import sniff
 import time
 import sys
 
-# Stops the packet from returning "{PACKET}\nNone" when called with summary()
-def print_packet(packet):
-    return packet.summary()
+def create_summary(packet):
+    return packet[0].sprintf("srcIP: %IP.src% - dstIP: %IP.dst% - IPproto: %IP.proto%");
 
 def get_packets(count):
     print("start")
-    current = sniff(prn=print_packet, count = 1)
+    current = sniff(prn=create_summary, count = 1)
     duplicates = 0
     for _ in range(0, count):
         print("loop")
         previous = current
-        current = sniff(prn=print_packet, count = 1)
+        current = sniff(prn=create_summary, count = 1)
         if (current[0].sprintf("%IP.src% %IP.dst% %IP.proto%") == 
         previous[0].sprintf("%IP.src% %IP.dst% %IP.proto%")): # -> "[x#]" at the end of packet summaries
             duplicates += 1
