@@ -2,24 +2,32 @@ from scapy.all import sniff
 import time
 import sys
 
-def create_summary(packet):
-    return packet[0].sprintf("srcIP: %IP.src% - dstIP: %IP.dst% - IPproto: %IP.proto%");
+
+def create_summary(packet, fields=None):
+    if fields is None:
+        fields = ["IP.src", "IP.dst", "IP.proto"]
+    # %'s make parsable by sprintf
+    elements = "%" + "% - %".join([f for f in fields]) + "%"
+    return packet[0].sprintf(elements)
+
 
 def get_packets(count):
     print("start")
-    current = sniff(prn=create_summary, count = 1)
+    current = sniff(prn=create_summary, count=1)
     duplicates = 0
     for _ in range(0, count):
         print("loop")
         previous = current
-        current = sniff(prn=create_summary, count = 1)
-        if create_summary(current) == create_summary(previous): # -> "[x#]" at the end of packet summaries
+        current = sniff(prn=create_summary, count=1)
+        # Eventually -> [x#] after summary
+        if create_summary(current) == create_summary(previous):
             duplicates += 1
             print("Duplicate of srcIP, dstIP, IPproto: #" + str(duplicates))
         else:
             duplicates = 0
             previous = current
         time.sleep(0.2)
+
 
 def parse_user_args():
     if len(sys.argv) != 2:
@@ -38,9 +46,11 @@ def parse_user_args():
         sys.exit(-1)
     return count
 
+
 def main():
     count = parse_user_args()
     get_packets(count)
+
 
 if __name__ == "__main__":
     main()
