@@ -1,6 +1,7 @@
 from scapy.all import sniff
 import time
 import sys
+import argparse
 
 
 def create_summary(packet, fields=None):
@@ -29,22 +30,35 @@ def get_packets(count):
         time.sleep(0.2)
 
 
+# Make store -src, -dst, -proto
+# Also must make more options (presets?)
 def parse_user_args():
-    if len(sys.argv) != 2:
-        print("Invalid number of arguments")
-        sys.exit(-1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-src",
+        help="Include the source IP of the packet when printing summaries",
+        type=str,
+    )
+    parser.add_argument(
+        "-dst",
+        help="Include the destination IP of the packet when printing summaries",
+        type=str,
+    )
+    parser.add_argument(
+        "-proto",
+        help="Include the IP protocol of the packet when printing summaries",
+        type=str,
+    )
+    parser.add_argument(
+        "quantity",
+        nargs="?",
+        help="The quantity of packets to give (default = 50)",
+        type=int,
+        default=50,
+    )
+    args = parser.parse_args()
 
-    count = sys.argv[1]
-    try:
-        count = int(count)
-    except ValueError:
-        print("Range must be an integer")
-        sys.exit(-1)
-
-    if count <= 0:
-        print("Range must be > 0")
-        sys.exit(-1)
-    return count
+    return args.quantity
 
 
 def main():
