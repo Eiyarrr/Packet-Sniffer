@@ -1,6 +1,5 @@
 from scapy.all import sniff
 import time
-import sys
 import argparse
 
 
@@ -37,17 +36,17 @@ def parse_user_args():
     parser.add_argument(
         "-src",
         help="Include the source IP of the packet when printing summaries",
-        type=str,
+        action="store_true",
     )
     parser.add_argument(
         "-dst",
         help="Include the destination IP of the packet when printing summaries",
-        type=str,
+        action="store_true",
     )
     parser.add_argument(
         "-proto",
         help="Include the IP protocol of the packet when printing summaries",
-        type=str,
+        action="store_true",
     )
     parser.add_argument(
         "quantity",
