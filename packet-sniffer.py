@@ -1,5 +1,4 @@
 from scapy.all import sniff
-import time
 import argparse
 
 
@@ -11,22 +10,14 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
+def process_packet(packet):
+    summary = create_summary(packet)
+    print(summary)
+
+
 def get_packets(count):
     print("start")
-    current = sniff(prn=create_summary, count=1)
-    duplicates = 0
-    for _ in range(0, count):
-        print("loop")
-        previous = current
-        current = sniff(prn=create_summary, count=1)
-        # Eventually -> [x#] after summary
-        if create_summary(current) == create_summary(previous):
-            duplicates += 1
-            print("Duplicate of srcIP, dstIP, IPproto: #" + str(duplicates))
-        else:
-            duplicates = 0
-            previous = current
-        time.sleep(0.2)
+    sniff(prn=process_packet, count=count)
 
 
 # Make store -src, -dst, -proto
