@@ -1,5 +1,6 @@
 from scapy.all import sniff
 import argparse
+import json
 
 
 def create_summary(packet, fields=None):
@@ -66,6 +67,12 @@ def get_fields():
         fields.append("IP.src")
 
     return fields
+
+
+def write_data(data):
+    file = open("packets.json", "w")
+    json.dump(data, file, indent = 4)
+
 
 
 def main():
