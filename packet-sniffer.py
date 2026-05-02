@@ -19,9 +19,9 @@ def process_packet(packet):
     print(f"{summary} [x{seen[summary]}]")
 
 
-def get_packets(count):
+def get_packets(fields):
     print("start")
-    sniff(prn=process_packet, count=count)
+    sniff(prn=process_packet, count=fields[0])
 
 
 # Make store -src, -dst, -proto
@@ -50,14 +50,27 @@ def parse_user_args():
         type=int,
         default=50,
     )
-    args = parser.parse_args()
 
-    return args.quantity
+    return parser.parse_args()
+
+
+def get_fields():
+    args = parse_user_args()
+    fields = [args.quantity]
+
+    if args.src:
+        fields.append("IP.src")
+    if args.dst:
+        fields.append("IP.src")
+    if args.proto:
+        fields.append("IP.src")
+
+    return fields
 
 
 def main():
-    count = parse_user_args()
-    get_packets(count)
+    fields = get_fields()
+    get_packets(fields)
 
 
 if __name__ == "__main__":
