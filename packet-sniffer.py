@@ -10,9 +10,13 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
+seen = {}
+
+
 def process_packet(packet):
     summary = create_summary(packet)
-    print(summary)
+    seen[summary] = seen.get(summary, 0) + 1
+    print(f"{summary} [x{seen[summary]}]")
 
 
 def get_packets(count):
