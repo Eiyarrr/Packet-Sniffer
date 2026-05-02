@@ -16,8 +16,14 @@ seen = {}
 
 def process_packet(packet):
     summary = create_summary(packet)
-    seen[summary] = seen.get(summary, 0) + 1
-    print(f"{summary} [x{seen[summary]}]")
+
+    if summary not in seen:
+        seen[summary] = {"count": 0, "packet": None}
+
+    seen[summary]["count"] += 1
+    seen[summary]["packet"] = summary
+
+    print(f"{seen[summary]["packet"]} [x{seen[summary]["count"]}]")
 
 
 def get_packets(fields):
@@ -69,7 +75,11 @@ def get_fields():
     return fields
 
 
-def write_data(data):
+def write_data():
+    data = []
+    for s in seen:
+        data.append((s, s[0]))
+
     file = open("packets.json", "w")
     json.dump(data, file, indent = 4)
 
@@ -78,6 +88,7 @@ def write_data(data):
 def main():
     fields = get_fields()
     get_packets(fields)
+    write_data()
 
 
 if __name__ == "__main__":
