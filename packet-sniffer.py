@@ -23,7 +23,7 @@ def process_packet(packet):
     seen[summary]["count"] += 1
     seen[summary]["packet"] = summary
 
-    print(f"{seen[summary]["packet"]} [x{seen[summary]["count"]}]")
+    print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
 
 
 def get_packets(fields):
@@ -31,7 +31,6 @@ def get_packets(fields):
     sniff(prn=process_packet, count=fields[0])
 
 
-# Make store -src, -dst, -proto
 # Also must make more options (presets?)
 def parse_user_args():
     parser = argparse.ArgumentParser()
@@ -78,11 +77,10 @@ def get_fields():
 def write_data():
     data = []
     for s in seen:
-        data.append((s, s[0]))
+        data.append((seen[s]["packet"], seen[s]["count"]))
 
     file = open("packets.json", "w")
-    json.dump(data, file, indent = 4)
-
+    json.dump(data, file, indent=4)
 
 
 def main():
