@@ -12,6 +12,11 @@ def parse_user_args():
         default=50,
     )
     parser.add_argument(
+        "-p",
+        help="Print output of sniffer to terminal",
+        action="store_true",
+    )
+    parser.add_argument(
         "-src",
         help="Include the source IP of the packet when printing summaries",
         action="store_true",
