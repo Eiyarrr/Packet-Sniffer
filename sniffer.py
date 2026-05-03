@@ -13,7 +13,7 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
-def process_packet(packet):
+def process_packet(packet, print_packet):
     summary = create_summary(packet)
 
     if summary not in seen:
@@ -22,9 +22,10 @@ def process_packet(packet):
     seen[summary]["count"] += 1
     seen[summary]["packet"] = summary
 
-    print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
+    if print_packet:
+        print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
 
 
 def get_packets(fields):
     print("start")
-    sniff(prn=process_packet, count=fields[0])
+    sniff(prn=lambda packet: process_packet(packet, fields[1]), count=fields[0])
