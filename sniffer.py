@@ -5,6 +5,9 @@ from scapy.all import sniff
 # storage for all packet summaries and duplicate counts
 seen = {}
 
+# storage for seen hosts/ip combos as DNS lookups are expensive
+resolved_hosts = {}
+
 
 def create_summary(packet, fields=None):
     if fields is None:
@@ -14,20 +17,32 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
+def resolve_ip(ip):
+    if ip in resolved_hosts:
+        return resolved_hosts[ip]
+
+    try:
+        hostname, _, _ = socket.gethostbyaddr(ip)
+
+    # if no hostname from given IP addr, pretend the addr
+    # is a hostname to prevent further unnecessary lookups
+    except (socket.herror, socket.gaierror, TimeoutError):
+        hostname = ip
+
+    resolved_hosts[ip] = hostname
+    return hostname
+
+
 def print_packet(summary, fields):
 
-    ip = seen[summary]['packet']
-    count = seen[summary]['count']
+    ip = seen[summary]["packet"]
+    count = seen[summary]["count"]
 
     SHOULD_RESOLVE = fields[5]
     if SHOULD_RESOLVE:
-        try:
-            hostname, _, _ = socket.gethostbyaddr(ip)
-            print(f"{hostname} [x{count}]")
-            return
-        # if there is no resolvable hostname, just print IP addr
-        except (socket.herror, socket.gaierror, TimeoutError):
-            pass
+        hostname = resolve_ip(ip)
+        print(f"{hostname} [x{count}]")
+        return
 
     print(f"{ip} [x{count}]")
 
