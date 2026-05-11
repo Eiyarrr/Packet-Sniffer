@@ -22,7 +22,7 @@ def resolve_ip(ip):
         return resolved_hosts[ip]
 
     try:
-        hostname, _, _ = socket.gethostbyaddr(ip)
+        hostname = socket.gethostbyaddr(ip)[0]
 
     # if no hostname from given IP addr, pretend the addr
     # is a hostname to prevent further unnecessary lookups
@@ -34,17 +34,16 @@ def resolve_ip(ip):
 
 
 def print_packet(summary, fields):
-
     ip = seen[summary]["packet"]
     count = seen[summary]["count"]
 
+    target = ip
+
     SHOULD_RESOLVE = fields[5]
     if SHOULD_RESOLVE:
-        hostname = resolve_ip(ip)
-        print(f"{hostname} [x{count}]")
-        return
+        target = resolve_ip(target)
 
-    print(f"{ip} [x{count}]")
+    print(f"{target} [x{count}]")
 
 
 def process_packet(packet, fields):
