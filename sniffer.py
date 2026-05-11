@@ -1,3 +1,4 @@
+import socket
 from scapy.all import sniff
 
 
@@ -13,7 +14,16 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
-def print_packet(summary):
+def print_packet(summary, fields):
+    SHOULD_RESOLVE = fields[5]
+    if SHOULD_RESOLVE:
+        try:
+            hostname, _, _ = socket.gethostbyaddr(seen[summary]['packet'])
+            print(f"{hostname} [x{seen[summary]['count']}]")
+            return
+        # if there is no resolvable hostname, just print IP addr
+        except socket.herror:
+            pass
     print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
 
 
@@ -23,10 +33,10 @@ def process_packet(packet, fields):
 
     seen[summary]["count"] += 1
     seen[summary]["packet"] = summary
-    
+
     SHOULD_PRINT = fields[1]
     if SHOULD_PRINT:
-        print_packet(summary)
+        print_packet(summary, fields)
 
 
 def get_packets(fields):
