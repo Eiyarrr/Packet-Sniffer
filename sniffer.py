@@ -48,7 +48,8 @@ def print_packet(summary, fields):
 
 def process_packet(packet, fields):
     summary = create_summary(packet)
-    seen[summary] = {"count": 0, "packet": None}
+    if summary not in seen:
+        seen[summary] = {"count": 0, "packet": None}
 
     seen[summary]["count"] += 1
     seen[summary]["packet"] = summary
