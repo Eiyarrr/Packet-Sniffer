@@ -15,16 +15,21 @@ def create_summary(packet, fields=None):
 
 
 def print_packet(summary, fields):
+
+    ip = seen[summary]['packet']
+    count = seen[summary]['count']
+
     SHOULD_RESOLVE = fields[5]
     if SHOULD_RESOLVE:
         try:
-            hostname, _, _ = socket.gethostbyaddr(seen[summary]['packet'])
-            print(f"{hostname} [x{seen[summary]['count']}]")
+            hostname, _, _ = socket.gethostbyaddr(ip)
+            print(f"{hostname} [x{count}]")
             return
         # if there is no resolvable hostname, just print IP addr
         except (socket.herror, socket.gaierror, TimeoutError):
             pass
-    print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
+
+    print(f"{ip} [x{count}]")
 
 
 def process_packet(packet, fields):
