@@ -13,18 +13,20 @@ def create_summary(packet, fields=None):
     return packet[0].sprintf(elements)
 
 
-def process_packet(packet, fields):
-    print_packet = fields[1]
-    summary = create_summary(packet)
+def print_packet(summary):
+    print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
 
-    if summary not in seen:
-        seen[summary] = {"count": 0, "packet": None}
+
+def process_packet(packet, fields):
+    summary = create_summary(packet)
+    seen[summary] = {"count": 0, "packet": None}
 
     seen[summary]["count"] += 1
     seen[summary]["packet"] = summary
-
-    if print_packet:
-        print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
+    
+    SHOULD_PRINT = fields[1]
+    if SHOULD_PRINT:
+        print_packet(summary)
 
 
 def get_packets(fields):
