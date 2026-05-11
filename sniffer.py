@@ -22,7 +22,7 @@ def print_packet(summary, fields):
             print(f"{hostname} [x{seen[summary]['count']}]")
             return
         # if there is no resolvable hostname, just print IP addr
-        except (socket.herror, socket.gaierror):
+        except (socket.herror, socket.gaierror, TimeoutError):
             pass
     print(f"{seen[summary]['packet']} [x{seen[summary]['count']}]")
 
