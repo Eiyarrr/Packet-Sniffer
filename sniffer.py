@@ -2,6 +2,9 @@ import socket
 from scapy.all import sniff
 
 
+# storage for all raw packets seen
+packets = []
+
 # storage for all packet summaries and duplicate counts
 seen = {}
 
@@ -47,6 +50,7 @@ def print_packet(summary, fields):
 
 
 def process_packet(packet, fields):
+    packets.append(packet)
     summary = create_summary(packet)
     if summary not in seen:
         seen[summary] = {"count": 0, "packet": None}

@@ -1,10 +1,10 @@
-from sniffer import seen
+from sniffer import packets
 from scapy.all import wrpcap
 
 
 def write_data():
     data = []
-    for s in seen:
-        data.append((seen[s]["packet"], seen[s]["count"]))
+    for p in packets:
+        data.append(p)
     
     wrpcap("capture.pcap", data)
