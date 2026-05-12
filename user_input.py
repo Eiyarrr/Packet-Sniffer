@@ -1,7 +1,6 @@
 import argparse
 
 
-# Also must make more options (presets?)
 def parse_user_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(  # 0
@@ -13,7 +12,7 @@ def parse_user_args():
     )
     parser.add_argument(  # 1
         "-p",
-        "-print",
+        "--print",
         help="Print output of sniffer to terminal",
         action="store_true",
     )
@@ -39,7 +38,7 @@ def parse_user_args():
     )
     parser.add_argument(  # 6
         "-r",
-        "-read",
+        "--read",
         metavar="PCAP_FILE",
         help="Read from given pcap file",
     )
@@ -49,7 +48,7 @@ def parse_user_args():
 
 def get_fields():
     args = parse_user_args()
-    if args.read:
+    if args.read is not None:
         args.print = True
 
     fields = []
