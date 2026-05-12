@@ -52,7 +52,6 @@ def get_fields():
         args.print = True
 
     fields = []
-
     for a in vars(args).values():
         fields.append(a)
 
