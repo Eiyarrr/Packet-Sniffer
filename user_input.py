@@ -36,6 +36,12 @@ def parse_user_args():
         help="parse IP addresses in printouts to domains",
         action="store_true",
     )
+    parser.add_argument( # 6
+        "-r",
+        metavar="PCAP_FILE",
+        help="Read from given pcap file",
+    )
+
 
     return parser.parse_args()
 
