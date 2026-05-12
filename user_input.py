@@ -13,6 +13,7 @@ def parse_user_args():
     )
     parser.add_argument( # 1
         "-p",
+        "-print",
         help="Print output of sniffer to terminal",
         action="store_true",
     )
@@ -38,6 +39,7 @@ def parse_user_args():
     )
     parser.add_argument( # 6
         "-r",
+        "-read",
         metavar="PCAP_FILE",
         help="Read from given pcap file",
     )
