@@ -59,7 +59,8 @@ def process_packet(packet, fields):
     seen[summary]["packet"] = summary
 
     SHOULD_PRINT = fields[1]
-    if SHOULD_PRINT:
+    IS_READING = fields[6]
+    if SHOULD_PRINT or IS_READING:
         print_packet(summary, fields)
 
 

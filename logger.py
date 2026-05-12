@@ -1,4 +1,4 @@
-from sniffer import packets
+from sniffer import packets, process_packet
 from scapy.all import wrpcap, rdpcap
 
 
@@ -8,4 +8,6 @@ def write_data():
 
 def read_data(fields):
     FILE = fields[6]
-    rdpcap(FILE)
+    read_packets = rdpcap(FILE)
+    for packet in read_packets:
+        process_packet(packet, fields)
